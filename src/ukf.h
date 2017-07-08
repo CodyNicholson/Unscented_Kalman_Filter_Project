@@ -6,15 +6,18 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include "tools.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
 class UKF {
 public:
-
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
+
+  ///* for calculation of delta_t
+  long previous_timestamp_;
 
   ///* if this is false, laser measurements will be ignored (except for init)
   bool use_laser_;
@@ -53,7 +56,7 @@ public:
   double std_radphi_;
 
   ///* Radar measurement noise standard deviation radius change in m/s
-  double std_radrd_ ;
+  double std_radrd_;
 
   ///* Weights of sigma points
   VectorXd weights_;
@@ -64,8 +67,29 @@ public:
   ///* Augmented state dimension
   int n_aug_;
 
+  ///* Laser measurement dimension
+  int n_z_laser_;
+
+  ///* Radar measurement dimension
+  int n_z_radar_;
+
   ///* Sigma point spreading parameter
   double lambda_;
+
+  ///* the current NIS for radar
+  double NIS_radar_;
+
+  ///* the current NIS for laser
+  double NIS_laser_;
+
+  ///* Measurement matrix for laser
+  MatrixXd H_;
+
+  ///* Measurement noise radar
+  MatrixXd R_laser_;
+
+  ///* Measurement noise radar
+  MatrixXd R_radar_;
 
 
   /**
@@ -90,6 +114,9 @@ public:
    * @param delta_t Time between k and k+1 in s
    */
   void Prediction(double delta_t);
+  void createSigmaPoints(MatrixXd *Xsig_out);
+  void predictSigmaPoints(MatrixXd Xsig_aug, double delta_t);
+  void predictMeanCov();
 
   /**
    * Updates the state and the state covariance matrix using a laser measurement
@@ -102,6 +129,10 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+  void predictMeasurementRadar(Eigen::MatrixXd *Zsig_pred, VectorXd *z_pred,
+                               MatrixXd *S_pred);
+  void innovateRadar(VectorXd raw_measurements, MatrixXd Zsig_pred,
+                     VectorXd z_pred, MatrixXd S_pred);
 };
 
 #endif /* UKF_H */
