@@ -1,17 +1,18 @@
 #ifndef UKF_H
 #define UKF_H
 
-#include "measurement_package.h"
-#include "Eigen/Dense"
 #include <vector>
 #include <string>
 #include <fstream>
+#include "Eigen/Dense"
 #include "tools.h"
+#include "measurement_package.h"
 
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-class UKF {
+class UKF
+{
 public:
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
@@ -91,7 +92,6 @@ public:
   ///* Measurement noise radar
   MatrixXd R_radar_;
 
-
   /**
    * Constructor
    */
@@ -114,9 +114,9 @@ public:
    * @param delta_t Time between k and k+1 in s
    */
   void Prediction(double delta_t);
-  void createSigmaPoints(MatrixXd *Xsig_out);
-  void predictSigmaPoints(MatrixXd Xsig_aug, double delta_t);
-  void predictMeanCov();
+  void GenerateSigmaPoints(MatrixXd *Xsig_out);
+  void PredictSigmaPoints(MatrixXd Xsig_aug, double delta_t);
+  void PredictMeanCov();
 
   /**
    * Updates the state and the state covariance matrix using a laser measurement
@@ -129,10 +129,8 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
-  void predictMeasurementRadar(Eigen::MatrixXd *Zsig_pred, VectorXd *z_pred,
-                               MatrixXd *S_pred);
-  void innovateRadar(VectorXd raw_measurements, MatrixXd Zsig_pred,
-                     VectorXd z_pred, MatrixXd S_pred);
+  void PredictMeasurementRadar(Eigen::MatrixXd *Zsig_pred, VectorXd *z_pred, MatrixXd *S_pred);
+  void InnovateRadar(VectorXd raw_measurements, MatrixXd Zsig_pred, VectorXd z_pred, MatrixXd S_pred);
 };
 
 #endif /* UKF_H */
