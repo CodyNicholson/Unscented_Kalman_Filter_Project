@@ -167,9 +167,9 @@ void UKF::Prediction(double delta_t)
   // create sigma point matrix
   MatrixXd Xsig_aug = MatrixXd(n_aug_, 2 * n_aug_ + 1);
   Xsig_aug.fill(0.0);
-  createSigmaPoints(&Xsig_aug);
-  predictSigmaPoints(Xsig_aug, delta_t);
-  predictMeanCov();
+  CreateSigmaPoints(&Xsig_aug);
+  PredictSigmaPoints(Xsig_aug, delta_t);
+  PredictMeanCov();
 }
 
 /**
@@ -211,8 +211,8 @@ void UKF::UpdateRadar(MeasurementPackage meas_package)
   S_pred.fill(0.0);
   VectorXd z = meas_package.raw_measurements_;
 
-  predictMeasurementRadar(&Zsig_pred, &z_pred, &S_pred);
-  innovateRadar(z, Zsig_pred, z_pred, S_pred);
+  PredictMeasurementRadar(&Zsig_pred, &z_pred, &S_pred);
+  InnovateRadar(z, Zsig_pred, z_pred, S_pred);
   VectorXd y = z - z_pred;
   NIS_radar_ = y.transpose() * S_pred.inverse() * y;
 }
