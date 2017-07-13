@@ -167,7 +167,7 @@ void UKF::Prediction(double delta_t)
   // create sigma point matrix
   MatrixXd Xsig_aug = MatrixXd(n_aug_, 2 * n_aug_ + 1);
   Xsig_aug.fill(0.0);
-  CreateSigmaPoints(&Xsig_aug);
+  GenerateSigmaPoints(&Xsig_aug);
   PredictSigmaPoints(Xsig_aug, delta_t);
   PredictMeanCov();
 }
