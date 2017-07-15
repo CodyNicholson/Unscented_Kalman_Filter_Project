@@ -1,8 +1,10 @@
 # Unscented_Kalman_Filter_Project
 
-Built an Unscented Kalman filter using C++ to estimate the state of a moving object of interest with noisy lidar and radar measurements
+I built this Unscented Kalman filter using C++ to estimate the state of a moving object of interest with noisy lidar and radar measurements
 
-A standard Kalman filter can only handle linear equations. Both the extended Kalman filter and the unscented Kalman filter allow you to use non-linear equations; the difference between EKF and UKF is how they handle non-linear equations. But the basics are the same: initialize, predict, update.
+A standard Kalman filter can only handle linear equations. Both the Extended Kalman filter and the Unscented Kalman filter allow you to use non-linear equations; the difference between EKF and UKF is how they handle non-linear equations.
+
+Instead of using linearization to predict the behavior of the system under investigation in the Extended Kalman filter, I used the Unscented Transformation. This filter has some advantages when compared to the EKF, because the Unscented transformation describes the nonlinear system better than the linearization, hence this filter converges to the right solution more rapidly. However, like the EKF, this filter may become unstable and results may be biased.
 
 All Kalman filters have the same three steps:
 
